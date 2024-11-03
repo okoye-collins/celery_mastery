@@ -21,15 +21,27 @@ services:
       - redis
 
   celery:
-    container_name: celery
+    container_name: celery1
     build: 
       context: ./dcelery
+    command: celery --app=dcelery worker --loglevel=INFO
     volumes:
       - ./dcelery:/usr/src/app/
-    command: celery --app=dcelery worker --loglevel=INFO
     environment:
       - DEBUG=1
       - SECRET_KEY=090innsnnrnsnnjnsf8948bkjbskjb
       - ALLOWED_HOSTS=localhost,127.0.0.1
     depends_on:
       - redis
+      - django
+
+  celery2:
+    container_name: celery2
+    build: 
+      context: ./celeryworker
+    command: celery --app=celerytask worker --loglevel=INFO
+    volumes:
+      - ./celeryworker:/usr/src/app/
+    depends_on:
+      - redis
+      - django
