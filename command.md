@@ -31,8 +31,15 @@ tp1.delay()
 tp2.delay()
 tp3.delay()
 
-<!-- grouping task -->
+<!-- grouping task (which is very good for parallel execution) -->
 from celery import group
 from newapp.task import tp, tp1, tp2, tp3
 tasks_group = group(tp.s(), tp1.s(), tp2.s(), tp3.s())
 tasks_group.apply_async()
+
+<!-- task chaining (when one task output is required for the next task to run) -->
+from celery import chain
+from newapp.tasks import tp, tp1, tp2, tp3
+
+task_chain = chain(tp.s(), tp1.s(), tp2.s())
+task_chain.apply_async()
