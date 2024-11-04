@@ -24,3 +24,15 @@ docker images
 
 <!-- this will remove dangling (unused) images, helping manage disk space. -->
 docker image prune -f
+
+
+tp.delay()
+tp1.delay()
+tp2.delay()
+tp3.delay()
+
+<!-- grouping task -->
+from celery import group
+from newapp.task import tp, tp1, tp2, tp3
+tasks_group = group(tp.s(), tp1.s(), tp2.s(), tp3.s())
+tasks_group.apply_async()
